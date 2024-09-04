@@ -46,7 +46,7 @@ def get_participants(markup, maxlen = 25000, exclude = [] ):
     for ts1,ts2,text,annid,k in sents:
         time1 = tslots[ts1]
         time2 = tslots[ts2]
-        timedsents.append([ts1, int(time1), ts2, int(time2), text, annid,k])
+        timedsents.append([ts1, int(time1), ts2, int(time2), re.sub(r'[\n\t]', ' ', text.strip()), annid,k])
     timedsents = sorted(timedsents, key = lambda x :x[3])
     out = []
     temp = []
@@ -73,7 +73,8 @@ def get_time_text(parts, audiof, outfldr):
 
                 s = int(s*sr/1000)
                 e = int(e*sr/1000)
-                outfname = f'{audiof.split("/")[-1][:-4]}_{speaker}_{id_}.wav'
+                # outfname = f'{audiof.split("/")[-1][:-4]}_{speaker}_{id_}.wav'
+                outfname = f'{audiof.split("/")[-1][:-4]}_{id_[1]}.wav'
                 sf.write(outfldr + outfname, audio_file_[s:e], sr)
                 d[outfname] = re.sub(r'\t', '' ,text)
         except Exception as e:
